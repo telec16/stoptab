@@ -1,8 +1,8 @@
 {
 
-	"manifest_version": 3.0,
+	"manifest_version": 2,
 	"name": "StopTab",
-	"version": "3.0",
+	"version": "1.0",
 
 	"description": "Kill every new tab, useful when surfing on popupish website",
 
@@ -10,17 +10,25 @@
 		"48": "icons/stoptab-48.png"
 	},
 	
-	"applications": {
-		"gecko": {
-			"id": "stoptabtelec.tk"
-		}
+	"permissions": [
+		"tabs",
+		"notifications",
+	],
+
+	"browser_action": {
+		"default_icon": "icons/stoptab-48.png",
+		"default_title": "Stop Tab"
 	},
 	
 	"content_scripts": [
-		{
-			"matches": ["*://*.mozilla.org/*"],
-			"js": ["stoptab.js"]
-		}
-	]
+    {
+      "matches": ["<all_urls>"],
+      "js": ["border.js"]
+    }
+  ],
+	
+  "background": {
+    "scripts": ["stoptab.js"]
+	}
 
 }
