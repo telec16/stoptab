@@ -1,8 +1,8 @@
 {
 
-	"manifest_version": 1,
+	"manifest_version": 3.0,
 	"name": "StopTab",
-	"version": "1.0",
+	"version": "3.0",
 
 	"description": "Kill every new tab, useful when surfing on popupish website",
 
@@ -12,7 +12,7 @@
 	
 	"applications": {
 		"gecko": {
-			"id": "stoptab@telec.tk"
+			"id": "stoptabtelec.tk"
 		}
 	},
 	
