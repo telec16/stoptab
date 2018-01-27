@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "StopTab",
-	"version": "1.0",
+	"version": "2.0",
 
 	"description": "Kill every new tab, useful when surfing on popupish website",
 
@@ -10,9 +10,16 @@
 		"48": "icons/stoptab-48.png"
 	},
 	
+	"applications": {
+		"gecko": {
+			"id": "stoptab@telec.tk"
+		}
+	},
+	
 	"permissions": [
 		"tabs",
-		"notifications"
+		"notifications",
+		"storage"
 	],
 
 	"browser_action": {
@@ -29,6 +36,10 @@
 	
   "background": {
     "scripts": ["stoptab.js"]
-	}
+	},
+	
+  "options_ui": {
+    "page": "options.html"
+  }
 
 }

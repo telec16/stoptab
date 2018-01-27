@@ -1,8 +1,5 @@
 var DEBUG=false;
 
-var isHunting = false;
-var startTabsId = [];
-
 function notify(title, content){
 	browser.notifications.create({
     "type": "basic",
@@ -21,6 +18,11 @@ function errorCatcher(e){
 		console.log("error: "+out);
 	}
 }
+
+
+var isHunting = false;
+var startTabsId = [];
+
 
 function updateIcon(tab) {
 	browser.browserAction.setIcon({
@@ -67,24 +69,47 @@ function toggleHunting() {
 
 
 function updateGUI(tabs) {
+	var color_off = "#fb0010";
+	var color_on = "#fb0010";
+	var empty_tab = false;
+	
+	function onGot(result) {
+		color_off = result.border_off ? result.color_off : "";
+		color_on = result.border_on ? result.color_on : "";
+		
+		empty_tab = result.empty_tab;
+	}
+
 
 	function updateTab(tabs) {
-		
 		
 		for(let tab of tabs){
 			//notify("Stop Tab", `Updating '${tab.id}' id.`);
 			
 			updateIcon(tab);
-			browser.tabs.sendMessage(tab.id, {
-				command: isHunting
-			})
+			
+			var payload = {
+				command: "border",
+				isHunting: isHunting,
+				on: color_on,
+				off: color_off
+			};
+			browser.tabs.sendMessage(tab.id, payload)
 			.catch(errorCatcher);
 			
-			if(!startTabsId.includes(tab.id) && isHunting)
-				browser.tabs.remove(tab.id)
-				.catch(errorCatcher);
+			if(isHunting) {
+				if(empty_tab && (tab.url=="about:newtab") && !startTabsId.includes(tab.id))
+					startTabsId.push(tab.id);
+				
+				if((startTabsId.length>0) && !startTabsId.includes(tab.id))
+					browser.tabs.remove(tab.id)
+					.catch(errorCatcher);
+			}
 		}
 	}
+	
+	var getting = browser.storage.local.get();
+	getting.then(onGot, errorCatcher);
 
 	var gettingAllTabs = browser.tabs.query({/*active: true, currentWindow: true*/});
 	gettingAllTabs.then(updateTab);

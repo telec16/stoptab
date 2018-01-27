@@ -1,22 +1,15 @@
-var makeItGreen = '';//'5px solid green';
-var makeItRed = '5px solid red';
+var borderCSS = '5px solid ';
 
-function notify(title, content){
-	browser.notifications.create({
-    "type": "basic",
-    "iconUrl": browser.extension.getURL("icons/stoptab-48.png"),
-    "title": title,
-    "message": content
-	});
-}
-
-function changeBorder(isHunting) {
-	document.body.style.border = ((isHunting==true) ? makeItRed : makeItGreen);
+function changeBorder(isHunting, on, off) {
+	if((isHunting && (on == "")) ||
+		(!isHunting && (off == "")))
+		document.body.style.border = '';
+	else
+		document.body.style.border = borderCSS + (isHunting ? on : off);
 }
 
 
-browser.runtime.onMessage.addListener((message) => {
-	changeBorder(message.command);
+browser.runtime.onMessage.addListener((msg) => {
+	if(msg.command == "border")
+		changeBorder(msg.isHunting, msg.on, msg.off);
 });
-
-
